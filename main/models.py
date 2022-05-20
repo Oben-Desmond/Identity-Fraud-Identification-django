@@ -48,6 +48,13 @@ class AppTransactions(models.Model):
     receiver_photo = models.CharField(max_length=200)
     sender_name = models.CharField(max_length=200)
     receiver_name = models.CharField(max_length=200)
+    lng = models.CharField(max_length=200, default="0")
+    lat = models.CharField(max_length=200,default="0")
+    day = models.CharField(max_length=200, default="1")
+    month = models.CharField(max_length=200, default="1")
+    time = models.CharField(max_length=200, default="1:00")
+    
+    
 
     # def __str__(self) -> str:
     #     return str({ self.amount, self.created_at,  self.id, self.sender_id, self.receiver_id, self.ref, self.type, self.category,  self.sender_name, self.receiver_name})

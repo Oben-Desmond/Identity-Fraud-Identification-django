@@ -26,11 +26,11 @@ url = "https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.c
 
 def getAnormally(data):
    
-    # df = data[["amount", "created_at","receiver_id","sender_id","type","id"]]
+    df = data[["amount", "created_at","receiver_id","sender_id","type","id"]]
     
    
     print(data)
-    return
+     
     
     
     for i in range(len(df["receiver_id"])):
@@ -58,8 +58,8 @@ def getAnormally(data):
 
     # distances and indexes of k-neaighbors from model outputs
     distances, indexes = nbrs.kneighbors(X) # plot mean of k-distances of each observation
-    # plt.plot(distances.mean(axis =1))
-    # plt.show()
+    plt.plot(distances.mean(axis =1))
+    plt.show()
 
     cutoff = []
     cutoff=distances.mean(axis =1)
@@ -73,9 +73,10 @@ def getAnormally(data):
     outlier_values = df.iloc[outlier_index]
     print(outlier_values)
 
-    return  list(outlier_values["id"])
 
     # plot data
-    # plt.scatter( df["type"], df["sender_id"],color = "b", s = 65)# plot outlier values
-    # plt.scatter(outlier_values["type"], outlier_values["sender_id"],  color = "r")
+    plt.scatter( df["amount"], df["created_at"],color = "b", s = 65)# plot outlier values
+    plt.scatter(outlier_values["amount"], outlier_values["created_at"],  color = "r")
     # plt.show()
+
+    return  list(outlier_values["id"])

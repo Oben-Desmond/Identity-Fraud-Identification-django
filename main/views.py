@@ -171,65 +171,57 @@ def machineLearner(request):
 # function calculates 
 
 
+@csrf_exempt
 def verifyPossibleAnormally(request):
-        # data = json.loads(request.body)
         
-        # create a new transaction object
-        # transaction = AppTransactions(
-        #     sender_id=data["sender_id"],
-        #     receiver_id=data["receiver_id"],
-        #     amount=data["amount"],
-        #     created_at=data["created_at"],
-        #     ref=data["ref"],
-        #     type=data["type"],
-        #     category=data["category"],
-        #     sender_photo=data["sender_photo"],
-        #     receiver_photo=data["receiver_photo"],
-        #     sender_name=data["sender_name"],
-        #     receiver_name=data["receiver_name"], 
-        #      ).objects.values("amount", "created_at","receiver_id","sender_id","type", "id")
 
         transactionData = AppTransactions.objects.all()
-        transactions = list(transactionData.values("amount", "created_at","receiver_id","sender_id","type", "id"))
         last_id = AppTransactionsSerializer(transactionData[len(transactionData)-1])["id"].value+1
 
 
+        data = json.loads(request.body)
+    
+        # create a new transaction object
         transaction = AppTransactions(
-        sender_id="obend678@gmail.com",
-        receiver_id="receiver_id",
-        amount="5000",
-        created_at="1653055865826",
-        ref="love",
-        type="transfer",
-        category="category", 
-        sender_photo="sender_photo",
-        receiver_photo="receiver_photo",
-        sender_name="sender_name",
-        receiver_name="receiver_name", 
+        sender_id=data["sender_id"],
+        receiver_id=data["receiver_id"],
+        amount=data["amount"],
+        created_at=data["created_at"],
+        ref=data["ref"],
+        type=data["type"],
+        category=data["category"],
+        sender_photo=data["sender_photo"],
+        receiver_photo=data["receiver_photo"],
+        sender_name=data["sender_name"],
+        receiver_name=data["receiver_name"], 
+        lng=data["lng"], 
+        lat=data["lat"], 
+        time=data["time"], 
+        month=data["month"], 
+        day=data["day"], 
         id=last_id
-         )
+         ).save()
 
         
-        # transactions = transactions.__add__([transaction])
+        transactionData = AppTransactions.objects.all()
+      
+        transactions = list(transactionData.values("amount", "created_at","receiver_id","sender_id","type", "id"))
 
         df = pd.DataFrame(list(transactions))
 
-        # df.add(pd.DataFrame(transaction))
-    
-
+  
         abnormalIds = getAnormally(df)
 
+        print(abnormalIds)
+        try:
+            if(abnormalIds.count(last_id)>0):
+                AppTransactions.objects.filter(id=last_id).delete()
+                return HttpResponse(json.dumps({"message":"success", "header":"transaction successful", "status":400, "data":{"safe":False}}), status=200, content_type="application/json")
+        except:
+            print("error getting index")
+         
 
-        # if(abnormalIds.index(last_id)>=0):
-        #     print("ABSNORMALLY")
-        # else:
-        #     print("NORMAL TRANSACTION")
-
-        print(df)
-        print("------------------")
-        print(transactions)
-
-        return HttpResponse(json.dumps({"message":"success", "header":"transaction successful", "status":200}))
+        return HttpResponse(json.dumps({"message":"success", "header":"transaction successful", "status":200, "data":{"safe":True}}))
 
 
     
