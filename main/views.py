@@ -1,6 +1,7 @@
 import datetime
 import json
 from django.shortcuts import render
+from main.detectionTrainer import getAnormally
 
 from main.forms import UserForm
 from main.serializers import AppTransactionsSerializer, ClientSerializer
@@ -10,8 +11,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect 
 # import knn algorithm classification libraries
 # import matplotlib as pl
-# import numpy as np
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.neighbors import NearestNeighbors
+
 from django.db.models import Sum
+
  
 
 
@@ -151,8 +157,83 @@ def recordTransaction(request):
 
 
 def machineLearner(request):
-    transactions = AppTransactions.objects.all().values("amount","created_at")
-    print(AppTransactionsSerializer(transactions))
+    transactions = AppTransactions.objects.all().values("amount", "created_at","receiver_id","sender_id","type", "id")
+    # transactions = AppTransactions.objects.all().values("amount","created_at","receiver_id")
+    # df = pd.DataFrame(list(transactions))
+    # df.add()
+    
+    # abnormalIds = getAnormally(df)
+     
+
     # return response
     return HttpResponse(json.dumps({"message":""}))
+
+# function calculates 
+
+
+def verifyPossibleAnormally(request):
+        # data = json.loads(request.body)
+        
+        # create a new transaction object
+        # transaction = AppTransactions(
+        #     sender_id=data["sender_id"],
+        #     receiver_id=data["receiver_id"],
+        #     amount=data["amount"],
+        #     created_at=data["created_at"],
+        #     ref=data["ref"],
+        #     type=data["type"],
+        #     category=data["category"],
+        #     sender_photo=data["sender_photo"],
+        #     receiver_photo=data["receiver_photo"],
+        #     sender_name=data["sender_name"],
+        #     receiver_name=data["receiver_name"], 
+        #      ).objects.values("amount", "created_at","receiver_id","sender_id","type", "id")
+
+        transactionData = AppTransactions.objects.all()
+        transactions = list(transactionData.values("amount", "created_at","receiver_id","sender_id","type", "id"))
+        last_id = AppTransactionsSerializer(transactionData[len(transactionData)-1])["id"].value+1
+
+
+        transaction = AppTransactions(
+        sender_id="obend678@gmail.com",
+        receiver_id="receiver_id",
+        amount="5000",
+        created_at="1653055865826",
+        ref="love",
+        type="transfer",
+        category="category", 
+        sender_photo="sender_photo",
+        receiver_photo="receiver_photo",
+        sender_name="sender_name",
+        receiver_name="receiver_name", 
+        id=last_id
+         )
+
+        
+        # transactions = transactions.__add__([transaction])
+
+        df = pd.DataFrame(list(transactions))
+
+        # df.add(pd.DataFrame(transaction))
+    
+
+        abnormalIds = getAnormally(df)
+
+
+        # if(abnormalIds.index(last_id)>=0):
+        #     print("ABSNORMALLY")
+        # else:
+        #     print("NORMAL TRANSACTION")
+
+        print(df)
+        print("------------------")
+        print(transactions)
+
+        return HttpResponse(json.dumps({"message":"success", "header":"transaction successful", "status":200}))
+
+
+    
+
+    
+
     
