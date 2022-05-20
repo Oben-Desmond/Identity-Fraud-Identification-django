@@ -68,6 +68,8 @@ CSRF_TRUSTED_ORIGINS=[
     'http://localhost:8100',
     'http://localhost:8100',   
     'http://192.168.43.45:8100',     
+    'http://192.168.43.45:8101',     
+    'http://localhost:8101',     
 ]
 
 TEMPLATES = [

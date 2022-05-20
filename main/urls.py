@@ -14,4 +14,6 @@ urlpatterns=[
     path("api/transactions/",  views.getTransactions, name="transactions"),
     path("api/balance/",  views.getBalance, name="balance"),
     path("api/record-transaction/",  views.recordTransaction, name="recordTransaction"),
+    path("api/ml", views.machineLearner, name="ml")
+
 ]

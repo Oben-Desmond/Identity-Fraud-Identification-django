@@ -71,13 +71,14 @@ def getUser(request):
     # print get request parameers
     print("===> requ")
     data = json.loads(request.body)
+    print(data)
     # get user data from database
     try:
         client = Client.objects.get(email=data["email"])
         print(client)
     except Exception as e:
         print(e)
-        return HttpResponse(json.dumps({"message":"error", "header":"transaction failed", "status":400}), status=400, content_type="application/json")
+        return HttpResponse(json.dumps({"message":"error", "header":"transaction failed", "status":400}), status=200, content_type="application/json")
     # serialize the user data
     serializer = ClientSerializer(client)
     #  return the serialized user data with message and header
@@ -147,3 +148,11 @@ def recordTransaction(request):
     transaction.save()
     # return the serialized transaction data with message and header
     return HttpResponse(json.dumps({"message":"success", "header":"transaction successful", "status":200}), status=200, content_type="application/json")
+
+
+def machineLearner(request):
+    transactions = AppTransactions.objects.all().values("amount","created_at")
+    print(AppTransactionsSerializer(transactions))
+    # return response
+    return HttpResponse(json.dumps({"message":""}))
+    
