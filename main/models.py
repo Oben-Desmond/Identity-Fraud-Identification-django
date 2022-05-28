@@ -36,6 +36,18 @@ class Client(models.Model):
     #     return str({self.name, self.email, self.password, self.created_at,  self.phone, self.lat, self.lng, self.city, self.country, self.photo})
 
 
+class ReportedTransactions(models.Model):
+    amount = models.CharField(max_length=200)
+    created_at= models.CharField(max_length=200)
+    reported_at= models.CharField(max_length=200)
+    reporter =  models.CharField(max_length=200)
+    reported = models.CharField(max_length=200)
+    type = models.CharField(max_length=200)
+    lng = models.CharField(max_length=200)
+    lat = models.CharField(max_length=200)
+    transaction_id = models.CharField(max_length=200, default="1")
+    
+
 class AppTransactions(models.Model): 
     amount = models.CharField(max_length=200)
     created_at = models.CharField(max_length=200) 
@@ -52,7 +64,7 @@ class AppTransactions(models.Model):
     lat = models.CharField(max_length=200,default="0")
     day = models.CharField(max_length=200, default="1")
     month = models.CharField(max_length=200, default="1")
-    time = models.CharField(max_length=200, default="1:00")
+    time = models.CharField(max_length=200, default="1")
     
     
 

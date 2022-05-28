@@ -15,7 +15,9 @@ urlpatterns=[
     path("api/balance/",  views.getBalance, name="balance"),
     path("api/record-transaction/",  views.recordTransaction, name="recordTransaction"),
     path("api/ml", views.machineLearner, name="ml"),
-    path("api/record-transaction/detect", views.verifyPossibleAnormally, name="transact-detect")
-    
-
+    path("api/record-transaction/detect", views.verifyPossibleAnormally, name="transact-detect"),
+    path("api/anormal", views.getAnormalData, name="anormal"),
+    path("api/report", views.reportTransaction, name="report"),
+    path("api/get-reports", views.getReportedTransactions, name="getReports"),
+    path("api/admin/summary", views.adminGetSummary, name="admin-summary"),
 ]

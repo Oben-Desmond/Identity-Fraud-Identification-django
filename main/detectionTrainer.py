@@ -13,6 +13,8 @@ import math
 
 
 def convertToNumber (s):
+    if(len(s)==0 or s==""):
+        return 0
     return int.from_bytes(s.encode(), 'little')
 
 def convertFromNumber (n):
@@ -26,7 +28,9 @@ url = "https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.c
 
 def getAnormally(data):
    
-    df = data[["amount", "created_at","receiver_id","sender_id","type","id"]]
+    # "receiver_id","sender_id"
+                                         
+    df = data[["amount", "created_at","receiver_id","sender_id","lng","lat","time","month","day", "type","id"]]
     
    
     print(data)
@@ -39,7 +43,13 @@ def getAnormally(data):
        
     
     for i in range(len(df["sender_id"])):
-            df["sender_id"][i]=convertToNumber(df["sender_id"][i])
+            print(df["sender_id"][i],"-------------------------------------------------------")
+            try:
+                df["sender_id"][i]=convertToNumber(df["sender_id"][i])
+            except:
+                print("error")
+                df["sender_id"][i]=0
+            print(df["sender_id"][i])
 
 
     for i in range(len(df["type"])):
@@ -59,7 +69,7 @@ def getAnormally(data):
     # distances and indexes of k-neaighbors from model outputs
     distances, indexes = nbrs.kneighbors(X) # plot mean of k-distances of each observation
     plt.plot(distances.mean(axis =1))
-    plt.show()
+    # plt.show()
 
     cutoff = []
     cutoff=distances.mean(axis =1)
@@ -75,8 +85,8 @@ def getAnormally(data):
 
 
     # plot data
-    plt.scatter( df["amount"], df["created_at"],color = "b", s = 65)# plot outlier values
-    plt.scatter(outlier_values["amount"], outlier_values["created_at"],  color = "r")
+    # plt.scatter( df["type"], df["time"],color = "b", s = 65)# plot outlier values
+    # plt.scatter(outlier_values["type"], outlier_values["time"],  color = "r")
     # plt.show()
 
     return  list(outlier_values["id"])
